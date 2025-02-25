@@ -1,0 +1,190 @@
+<script lang="ts" setup>
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import Alert from "~/components/Alert.vue";
+import ReservationDialog from "~/components/ReservationDialog.vue";
+import Loading from "~/components/Loading.vue";
+import { useLoadingStore } from "../stores/loading";
+
+const route = useRoute();
+const router = useRouter();
+const loadingStore = useLoadingStore();
+
+// header 顯示
+const isHeaderShow = ref(true);
+const isListShow = ref(false);
+let lastScrollY = 0;
+let isFirstScroll = true;
+const handleScroll = () => {
+  if (route.path !== "/") {
+    isHeaderShow.value = true;
+    return;
+  }
+  if (isFirstScroll) {
+    isFirstScroll = false;
+    return;
+  }
+  let currentScrollY = window.scrollY;
+  if (!isListShow.value) {
+    isHeaderShow.value = currentScrollY < lastScrollY;
+  }
+  lastScrollY = currentScrollY;
+};
+
+// header 捷徑滾動
+const scrollToSection = (id: string) => {
+  if (route.path !== "/") {
+    if (id) {
+      router.push({ path: "/", hash: `#${id}` });
+    } else {
+      router.push({ path: "/" });
+    }
+  } else {
+    if (id) {
+      const section = document.getElementById(id);
+      if (section) {
+        window.scrollTo({
+          top: section.offsetTop,
+          behavior: "smooth", // 平滑滾動
+        });
+      }
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // 平滑滾動
+      });
+    }
+  }
+  isListShow.value = false;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+  AOS.init();
+  window.onload = () => {
+    loadingStore.loadingShow = false;
+  };
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+</script>
+<template>
+  <div class="relative">
+    <div class="lg:container">
+      <div
+        class="fixed top-0 z-50 flex w-full items-center justify-between bg-black bg-opacity-85 px-10 text-white transition-all duration-500"
+        :class="isHeaderShow ? 'h-16' : 'h-0 overflow-hidden'"
+      >
+        <button
+          class="h-full py-2 transition-all duration-500"
+          @click="scrollToSection('')"
+        >
+          <img class="h-full" src="~/assets/img/logo-sm.png" alt="DACA" />
+        </button>
+        <ul
+          class="absolute inset-0 top-16 z-50 overflow-hidden transition-all duration-500 lg:relative lg:top-0 lg:flex lg:h-auto"
+          :class="` ${isListShow ? 'h-screen' : 'h-0'}`"
+        >
+          <li
+            class="border-t border-secondary bg-black bg-opacity-85 transition-all duration-500 lg:border-none lg:bg-opacity-0"
+          >
+            <button
+              class="w-screen px-6 py-2 lg:w-auto"
+              @click="scrollToSection('About')"
+            >
+              關於我們
+            </button>
+          </li>
+          <li
+            class="border-t border-secondary bg-black bg-opacity-85 transition-all duration-500 lg:border-none lg:bg-opacity-0"
+          >
+            <button
+              class="w-screen px-6 py-2 lg:w-auto"
+              @click="scrollToSection('Speciality')"
+            >
+              特色料理
+            </button>
+          </li>
+          <li
+            class="border-t border-secondary bg-black bg-opacity-85 transition-all duration-500 lg:border-none lg:bg-opacity-0"
+          >
+            <button
+              class="w-screen px-6 py-2 lg:w-auto"
+              @click="scrollToSection('News')"
+            >
+              最新消息
+            </button>
+          </li>
+          <li
+            class="border-t border-secondary bg-black bg-opacity-85 transition-all duration-500 lg:border-none lg:bg-opacity-0"
+          >
+            <button
+              class="w-screen px-6 py-2 lg:w-auto"
+              @click="scrollToSection('Reservation')"
+            >
+              訂位資訊
+            </button>
+          </li>
+          <!-- <li
+            class="border-t border-secondary bg-opacity-85 bg-black transition-all duration-500 lg:border-none lg:bg-opacity-0"
+          >
+            <button class="w-screen px-6 py-2 lg:w-auto">會員登入</button>
+          </li> -->
+        </ul>
+        <button class="text-2xl lg:hidden" @click="isListShow = !isListShow">
+          <i class="bi bi-list"></i>
+        </button>
+      </div>
+    </div>
+    <slot />
+    <div
+      class="grid grid-cols-2 space-y-10 bg-bgDark p-10 text-white md:space-y-0 md:p-20"
+    >
+      <div class="col-span-2 space-y-4 md:col-span-1">
+        <img class="w-[100px]" src="~/assets/img/logo.png" alt="DACA" />
+        <div class="flex space-x-4">
+          <a
+            href="https://www.facebook.com/p/DACA-Brunch-%E6%97%A9%E5%8D%88%E9%A4%90-100092573923369/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-white text-2xl transition-colors duration-300 hover:border-primary hover:bg-primary"
+          >
+            <i class="bi bi-facebook"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/daca_petfriendly/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-white text-2xl transition-colors duration-300 hover:border-primary hover:bg-primary"
+          >
+            <i class="bi bi-instagram"></i>
+          </a>
+          <a
+            href="https://www.threads.net/@daca_petfriendly"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex h-[48px] w-[48px] items-center justify-center rounded-full border border-white text-2xl transition-colors duration-300 hover:border-primary hover:bg-primary"
+          >
+            <i class="bi bi-threads"></i>
+          </a>
+        </div>
+        <p>© 2023 DacaBrunch 版權所有</p>
+      </div>
+      <div
+        class="col-span-2 flex flex-col justify-center space-y-3 md:col-span-1"
+      >
+        <h3 class="text-xl font-bold">草屯總店</h3>
+        <p>地址：南投縣草屯鎮中興路166號</p>
+        <p>電話：(049)231-3828</p>
+        <p>Email：dacabrunch2023@gmail.com</p>
+      </div>
+    </div>
+    <ReservationDialog />
+    <Alert />
+    <Loading />
+  </div>
+</template>
