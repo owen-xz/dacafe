@@ -108,14 +108,12 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };
 const aboutUs = ref();
 
 onMounted(() => {
-  gsap.to(aboutUs.value, {
+  $gsap.to(aboutUs.value, {
     backgroundPosition: "center -100px", // 背景向下移動 100px
     ease: "none", // 沒有緩動效果，保持線性動畫
     scrollTrigger: {

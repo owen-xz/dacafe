@@ -69,13 +69,12 @@ import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";
 import "swiper/css/pagination";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };
+
 const testimonial = ref();
 onMounted(() => {
-  gsap.to(testimonial.value, {
+  $gsap.to(testimonial.value, {
     backgroundPosition: "center -100px", // 背景向上移動 100px
     ease: "none", // 沒有緩動效果，保持線性動畫
     scrollTrigger: {

@@ -22,17 +22,16 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
+
+const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };
 
 const banner = ref();
 const logo = ref();
 const logoOpacity = ref(true);
-gsap.registerPlugin(ScrollTrigger);
 
 onMounted(() => {
   const targetY = window.innerHeight / 2 - 60 - logo.value.offsetHeight / 2;
-  gsap.to(logo.value, {
+  $gsap.to(logo.value, {
     y: targetY,
     ease: "none",
     scrollTrigger: {

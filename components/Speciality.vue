@@ -89,16 +89,14 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import gsap from "gsap";
 import AOS from "aos";
-import ScrollTrigger from "gsap/ScrollTrigger";
 
-gsap.registerPlugin(ScrollTrigger);
+const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };
 
 const speciality = ref();
 
 onMounted(() => {
-  gsap
+  $gsap
     .timeline({
       scrollTrigger: {
         trigger: speciality.value,
