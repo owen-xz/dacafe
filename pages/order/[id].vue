@@ -64,16 +64,16 @@
               <p>{{ order.orderer.name }}</p>
             </div>
             <div class="col-span-1 space-y-2">
-              <label>預訂日期:</label>
-              <p>{{ dayjs(order.reservedTime).format("YYYY/MM/DD HH:mm") }}</p>
-            </div>
-            <div class="col-span-1 space-y-2">
               <label>電話:</label>
               <p>{{ order.orderer.phone }}</p>
             </div>
             <div class="col-span-1 space-y-2">
               <label>電子郵件:</label>
               <p>{{ order.orderer.email }}</p>
+            </div>
+            <div class="col-span-1 space-y-2">
+              <label>預訂日期:</label>
+              <p>{{ dayjs(order.reservedTime).format("YYYY/MM/DD HH:mm") }}</p>
             </div>
             <div class="col-span-2 space-y-2">
               <label>備註:</label>

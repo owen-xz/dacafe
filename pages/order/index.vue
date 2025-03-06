@@ -53,13 +53,15 @@
         <div class="col-span-2 space-y-6 md:col-span-1">
           <h2 class="text-4xl">訂購人資訊</h2>
           <form class="grid grid-cols-2 gap-4" @submit.prevent="sendOrder">
-            <button
-              class="btn-primary-dark col-span-2 px-4 py-2"
-              @click="setUserData"
-              v-if="isUser"
-            >
-              帶入會員資料
-            </button>
+            <ClientOnly>
+              <button
+                class="btn-primary-dark col-span-2 px-4 py-2"
+                @click="setUserData"
+                v-if="userStore.name"
+              >
+                帶入會員資料
+              </button>
+            </ClientOnly>
             <div class="col-span-1 space-y-2">
               <label for="orderName">姓名：</label>
               <input
@@ -69,18 +71,6 @@
                 placeholder="姓名"
                 required
                 v-model="orderData.name"
-              />
-            </div>
-            <div class="col-span-1 space-y-2">
-              <label for="orderName">預訂日期：</label>
-              <VueDatePicker
-                v-model="orderData.reservedTime"
-                :ui="{ input: 'orderDateInput' }"
-                :min-date="new Date()"
-                select-text="選擇"
-                cancel-text="取消"
-                placeholder="預訂日期"
-                required
               />
             </div>
             <div class="col-span-1 space-y-2">
@@ -101,6 +91,18 @@
                 placeholder="電子郵件"
                 required
                 v-model="orderData.email"
+              />
+            </div>
+            <div class="col-span-1 space-y-2">
+              <label for="orderName">預訂日期：</label>
+              <VueDatePicker
+                v-model="orderData.reservedTime"
+                :ui="{ input: 'orderDateInput' }"
+                :min-date="new Date()"
+                select-text="選擇"
+                cancel-text="取消"
+                placeholder="預訂日期"
+                required
               />
             </div>
             <div class="col-span-2 space-y-2">
@@ -201,18 +203,11 @@ const sendOrder = async () => {
 };
 
 // 帶入會員資料
-const isUser = ref(false);
 const setUserData = () => {
   orderData.value.name = userStore.name;
   orderData.value.phone = userStore.phone;
   orderData.value.email = userStore.email;
 };
-
-onMounted(() => {
-  if (sessionStorage.getItem("accessToken")) {
-    isUser.value = true;
-  }
-});
 </script>
 
 <style>

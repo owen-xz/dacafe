@@ -18,28 +18,21 @@
         <h2 class="text-2xl md:text-4xl">立即訂位</h2>
       </div>
       <form class="grid grid-cols-2 gap-4" @submit.prevent="sendReserved">
-        <button
-          class="btn-primary col-span-2 px-4 py-2"
-          @click="setUserData"
-          v-if="isUser"
-        >
-          帶入會員資料
-        </button>
+        <ClientOnly>
+          <button
+            class="btn-primary col-span-2 px-4 py-2"
+            @click="setUserData"
+            v-if="userStore.name"
+          >
+            帶入會員資料
+          </button>
+        </ClientOnly>
         <input
           class="col-span-1 bg-black p-4"
           type="text"
           placeholder="姓名"
           required
           v-model="reservationData.name"
-        />
-        <VueDatePicker
-          v-model="reservationData.reservedTime"
-          :ui="{ input: 'reservationDateInput' }"
-          :min-date="new Date()"
-          select-text="選擇"
-          cancel-text="取消"
-          placeholder="訂位日期"
-          required
         />
         <input
           class="col-span-1 bg-black p-4"
@@ -54,6 +47,15 @@
           placeholder="電子郵件"
           required
           v-model="reservationData.email"
+        />
+        <VueDatePicker
+          v-model="reservationData.reservedTime"
+          :ui="{ input: 'reservationDateInput' }"
+          :min-date="new Date()"
+          select-text="選擇"
+          cancel-text="取消"
+          placeholder="訂位日期"
+          required
         />
         <textarea
           class="col-span-2 bg-black p-4"
@@ -120,18 +122,11 @@ const sendReserved = async () => {
 };
 
 // 帶入會員資料
-const isUser = ref(false);
 const setUserData = () => {
   reservationData.value.name = userStore.name;
   reservationData.value.phone = userStore.phone;
   reservationData.value.email = userStore.email;
 };
-
-onMounted(() => {
-  if (sessionStorage.getItem("accessToken")) {
-    isUser.value = true;
-  }
-});
 </script>
 
 <style>
