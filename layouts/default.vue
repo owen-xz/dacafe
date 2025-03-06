@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
             <i class="bi bi-threads"></i>
           </a>
         </div>
-        <p>© 2023 DapcaBrunch 版權所有</p>
+        <p>© 2023 DacaBrunch 版權所有</p>
       </div>
       <div
         class="col-span-2 flex flex-col justify-center space-y-3 md:col-span-1"
