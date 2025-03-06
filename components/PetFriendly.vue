@@ -172,8 +172,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-
 // 切換 tab
 const nowTab = ref(1);
 const changeTab = (tab: number) => {

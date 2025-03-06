@@ -88,7 +88,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
 import AOS from "aos";
 
 const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };

@@ -22,7 +22,11 @@ const alertStore = useAlertStore();
         </button>
         <button
           class="px-10 py-4"
-          :class="alertStore.alertType === 'confirm' ? 'btn' : 'btn-outline'"
+          :class="
+            alertStore.alertType === 'confirm'
+              ? 'btn-primary-dark'
+              : 'btn-outline'
+          "
           @click="alertStore.confirmAlert"
         >
           確定

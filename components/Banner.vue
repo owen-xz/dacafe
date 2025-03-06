@@ -21,8 +21,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from "vue";
-
 const { $gsap } = useNuxtApp() as { $gsap: typeof gsap };
 
 const banner = ref();

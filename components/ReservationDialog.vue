@@ -1,20 +1,19 @@
 <script lang="ts" setup>
 const { public: config } = useRuntimeConfig();
-import { ref, watch, nextTick } from "vue";
 import { useAlertStore } from "~/stores/alert";
-import { useReservationStore } from "~/stores/reservation";
+import { useDialogStore } from "~/stores/dialog";
 import { useLoadingStore } from "~/stores/loading";
 import dayjs from "dayjs";
 
 const alertStore = useAlertStore();
-const reservationStore = useReservationStore();
+const dialogStore = useDialogStore();
 const loadingStore = useLoadingStore();
 
 // 開啟時 focus input
 const telInputFormBtn = ref();
 const telInput = ref();
 watch(
-  () => reservationStore.reservationDialogShow,
+  () => dialogStore.reservationDialogShow,
   (newVal) => {
     if (newVal) {
       nextTick(() => {
@@ -59,12 +58,13 @@ const checkIsReserved = async () => {
         reservedTime: res.reservedTime,
       };
     } else {
-      reservationStore.reservationDialogShow = false;
+      dialogStore.reservationDialogShow = false;
       alertStore.showAlert("尚無訂位記錄，或訂位已過期");
     }
     loadingStore.loadingShow = false;
   } catch (error: any) {
     alertStore.showAlert(error.response._data.message);
+    loadingStore.loadingShow = false;
   }
 };
 
@@ -92,6 +92,7 @@ const cancelReserved = async () => {
       loadingStore.loadingShow = false;
     } catch (error: any) {
       alertStore.showAlert(error.response._data.message);
+      loadingStore.loadingShow = false;
     }
   });
 };
@@ -106,13 +107,13 @@ const hideReservationDialog = () => {
     note: "",
     reservedTime: "",
   };
-  reservationStore.reservationDialogShow = false;
+  dialogStore.reservationDialogShow = false;
 };
 </script>
 <template>
   <div
     class="fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded border border-black bg-white p-4"
-    v-if="reservationStore.reservationDialogShow"
+    v-if="dialogStore.reservationDialogShow"
   >
     <div class="space-y-4" v-if="!reservationData.id">
       <div>訂位記錄查詢</div>
@@ -125,7 +126,7 @@ const hideReservationDialog = () => {
           placeholder="訂位電話"
           v-model="reservationData.phone"
         />
-        <button type="submit" ref="telInputFormBtn"></button>
+        <button class="hidden" type="submit" ref="telInputFormBtn"></button>
       </form>
       <div class="flex justify-center space-x-4">
         <button class="btn-outline w-full py-4" @click="hideReservationDialog">

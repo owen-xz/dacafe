@@ -14,25 +14,27 @@
     <div
       class="col-span-2 space-y-6 p-10 text-white md:space-y-10 lg:col-span-1"
     >
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-center">
         <h2 class="text-2xl md:text-4xl">立即訂位</h2>
-        <button class="btn-primary px-10 py-4" @click="checkReservation">
-          訂位記錄
-        </button>
       </div>
       <form class="grid grid-cols-2 gap-4" @submit.prevent="sendReserved">
+        <button
+          class="btn-primary col-span-2 px-4 py-2"
+          @click="setUserData"
+          v-if="isUser"
+        >
+          帶入會員資料
+        </button>
         <input
           class="col-span-1 bg-black p-4"
           type="text"
-          name=""
-          id=""
           placeholder="姓名"
           required
           v-model="reservationData.name"
         />
         <VueDatePicker
           v-model="reservationData.reservedTime"
-          :ui="{ input: 'dateInput' }"
+          :ui="{ input: 'reservationDateInput' }"
           :min-date="new Date()"
           select-text="選擇"
           cancel-text="取消"
@@ -42,8 +44,6 @@
         <input
           class="col-span-1 bg-black p-4"
           type="tel"
-          name=""
-          id=""
           placeholder="電話"
           required
           v-model="reservationData.phone"
@@ -51,16 +51,12 @@
         <input
           class="col-span-1 bg-black p-4"
           type="email"
-          name=""
-          id=""
           placeholder="電子郵件"
           required
           v-model="reservationData.email"
         />
         <textarea
           class="col-span-2 bg-black p-4"
-          name=""
-          id=""
           placeholder="留言給我們"
           v-model="reservationData.note"
         ></textarea>
@@ -77,12 +73,12 @@ const { public: config } = useRuntimeConfig();
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useAlertStore } from "~/stores/alert";
-import { useReservationStore } from "~/stores/reservation";
 import { useLoadingStore } from "~/stores/loading";
+import { useUserStore } from "~/stores/user";
 
 const alertStore = useAlertStore();
-const reservationStore = useReservationStore();
 const loadingStore = useLoadingStore();
+const userStore = useUserStore();
 
 const reservationData = ref({
   name: "",
@@ -119,23 +115,34 @@ const sendReserved = async () => {
     loadingStore.loadingShow = false;
   } catch (error: any) {
     alertStore.showAlert(error.response._data.message);
+    loadingStore.loadingShow = false;
   }
 };
 
-const checkReservation = () => {
-  reservationStore.reservationDialogShow = true;
+// 帶入會員資料
+const isUser = ref(false);
+const setUserData = () => {
+  reservationData.value.name = userStore.name;
+  reservationData.value.phone = userStore.phone;
+  reservationData.value.email = userStore.email;
 };
+
+onMounted(() => {
+  if (sessionStorage.getItem("accessToken")) {
+    isUser.value = true;
+  }
+});
 </script>
 
 <style>
-.dateInput {
+.reservationDateInput {
   background-color: black;
   padding-top: 16px;
   padding-bottom: 16px;
   border: none;
   color: white;
 }
-.dateInput::placeholder {
+.reservationDateInput::placeholder {
   color: white;
 }
 </style>

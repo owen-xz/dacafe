@@ -41,7 +41,6 @@
 </template>
 <script lang="ts" setup>
 const { public: config } = useRuntimeConfig();
-import { ref, computed } from "vue";
 import VueEasyLightbox from "vue-easy-lightbox";
 import { useLoadingStore } from "~/stores/loading";
 

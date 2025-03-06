@@ -1,16 +1,32 @@
 <script lang="ts" setup>
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 import AOS from "aos";
 import "aos/dist/aos.css";
+const { public: config } = useRuntimeConfig();
 import Alert from "~/components/Alert.vue";
+import LoginDialog from "~/components/LoginDialog.vue";
 import ReservationDialog from "~/components/ReservationDialog.vue";
+import CartDialog from "~/components/CartDialog.vue";
 import Loading from "~/components/Loading.vue";
 import { useLoadingStore } from "../stores/loading";
+import { useAlertStore } from "../stores/alert";
+import { useDialogStore } from "../stores/dialog";
+import { useCartStore } from "../stores/cart";
+import { useUserStore } from "../stores/user";
 
 const route = useRoute();
 const router = useRouter();
 const loadingStore = useLoadingStore();
+const alertStore = useAlertStore();
+const dialogStore = useDialogStore();
+const cartStore = useCartStore();
+const userStore = useUserStore();
+
+// 內容高度
+const footer = ref();
+const contentHeight = computed(() => {
+  return footer.value ? window.innerHeight - footer.value.offsetHeight : 0;
+});
 
 // header 顯示
 const isHeaderShow = ref(true);
@@ -60,9 +76,61 @@ const scrollToSection = (id: string) => {
   isListShow.value = false;
 };
 
-onMounted(() => {
+// 頁面跳轉
+const goPage = (path: string) => {
+  router.push(path);
+  isListShow.value = false;
+};
+
+// 會員專區
+const showUserDialog = () => {
+  if (sessionStorage.getItem("accessToken")) {
+    router.push("/user");
+  } else {
+    dialogStore.loginDialogShow = true;
+  }
+  isListShow.value = false;
+};
+
+// 取得會員資料
+interface GetUserRes {
+  _id: string;
+  name: string;
+  phone: string;
+  email: string;
+  role: string;
+}
+const getUserData = async () => {
+  const token = sessionStorage.getItem("accessToken");
+  if (token) {
+    try {
+      const res = await $fetch<GetUserRes>(`${config.API_BASE_URL}/user`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (res) {
+        const { name, phone, email, role } = res;
+        userStore.name = name;
+        userStore.phone = phone;
+        userStore.email = email;
+        userStore.role = role;
+      }
+    } catch (error: any) {
+      console.log(error.response);
+    }
+  }
+};
+
+onMounted(async () => {
   window.addEventListener("scroll", handleScroll);
   AOS.init();
+  if (localStorage.getItem("cart")) {
+    cartStore.cart = JSON.parse(localStorage.getItem("cart") as string);
+  }
+  await getUserData();
+  loadingStore.loadingShow = false;
   window.onload = () => {
     loadingStore.loadingShow = false;
   };
@@ -103,10 +171,10 @@ onBeforeUnmount(() => {
             class="border-t border-secondary bg-black bg-opacity-85 transition-all duration-500 lg:border-none lg:bg-opacity-0"
           >
             <button
-              class="w-screen px-6 py-2 lg:w-auto"
-              @click="scrollToSection('Speciality')"
+              class="block w-screen px-6 py-2 text-center lg:w-auto"
+              @click="goPage('/product')"
             >
-              特色料理
+              餐點列表
             </button>
           </li>
           <li
@@ -129,20 +197,33 @@ onBeforeUnmount(() => {
               訂位資訊
             </button>
           </li>
-          <!-- <li
-            class="border-t border-secondary bg-opacity-85 bg-black transition-all duration-500 lg:border-none lg:bg-opacity-0"
-          >
-            <button class="w-screen px-6 py-2 lg:w-auto">會員登入</button>
-          </li> -->
         </ul>
-        <button class="text-2xl lg:hidden" @click="isListShow = !isListShow">
-          <i class="bi bi-list"></i>
-        </button>
+        <div class="space-x-6">
+          <button class="text-2xl" @click="showUserDialog">
+            <i class="bi bi-person"></i>
+          </button>
+          <button class="relative" @click="dialogStore.cartDialogShow = true">
+            <div
+              class="absolute -right-3 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-sm"
+              v-if="cartStore.cart.length > 0"
+            >
+              {{ cartStore.cart.length }}
+            </div>
+            <i class="bi bi-cart text-2xl"></i>
+          </button>
+          <button class="text-2xl lg:hidden" @click="isListShow = !isListShow">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
       </div>
     </div>
-    <slot />
+    <div :style="`min-height: ${contentHeight}px`">
+      <slot />
+    </div>
+
     <div
       class="grid grid-cols-2 space-y-10 bg-bgDark p-10 text-white md:space-y-0 md:p-20"
+      ref="footer"
     >
       <div class="col-span-2 space-y-4 md:col-span-1">
         <img class="w-[100px]" src="~/assets/img/logo.png" alt="DACA" />
@@ -172,7 +253,7 @@ onBeforeUnmount(() => {
             <i class="bi bi-threads"></i>
           </a>
         </div>
-        <p>© 2023 DacaBrunch 版權所有</p>
+        <p>© 2023 DapcaBrunch 版權所有</p>
       </div>
       <div
         class="col-span-2 flex flex-col justify-center space-y-3 md:col-span-1"
@@ -183,7 +264,9 @@ onBeforeUnmount(() => {
         <p>Email：dacabrunch2023@gmail.com</p>
       </div>
     </div>
+    <LoginDialog />
     <ReservationDialog />
+    <CartDialog />
     <Alert />
     <Loading />
   </div>

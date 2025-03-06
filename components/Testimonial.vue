@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from "vue";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";

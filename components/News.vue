@@ -41,7 +41,6 @@
 
 <script lang="ts" setup>
 const { public: config } = useRuntimeConfig();
-import { ref } from "vue";
 import { Pagination, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css";

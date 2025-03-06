@@ -10,9 +10,9 @@
     @apply border-2 border-black font-semibold transition-colors duration-300 hover:border-transparent hover:bg-primary hover:text-white;
   }
   .btn-primary {
-    @apply border border-transparent bg-primary font-semibold text-white transition-colors duration-300 hover:border-white hover:bg-transparent;
+    @apply border border-primary bg-primary font-semibold text-white transition-colors duration-300 hover:border-white hover:bg-transparent;
   }
   .btn-primary-dark {
-    @apply border border-transparent bg-primary font-semibold text-white transition-colors duration-300 hover:bg-black;
+    @apply border border-primary bg-primary font-semibold text-white transition-colors duration-300 hover:border-black hover:bg-black;
   }
 }
