@@ -127,6 +127,11 @@ const totalPrice = computed(() => {
   });
   return total;
 });
+
+// 設定 Head
+useHead({
+  title: "訂單詳情 - DACA輕食廚坊",
+});
 </script>
 
 <style></style>

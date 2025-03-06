@@ -143,6 +143,40 @@ const showLightbox = (index: number) => {
 const hideLightbox = () => {
   visibleRef.value = false;
 };
+
+// 設定 Head
+useHead({
+  title: `${product.value?.title} - DACA輕食廚坊`,
+  meta: [
+    {
+      name: "description",
+      content:
+        product.value?.content ||
+        "探索 DACA輕食廚坊的美味商品，享受精緻輕食與現泡茶飲。",
+    },
+    {
+      name: "keywords",
+      content: `${product.value?.title}, 輕食, 美食, DACA輕食廚坊, 早午餐, ${product.value?.category}`,
+    },
+    { name: "author", content: "DACA輕食廚坊" },
+    { property: "og:title", content: `${product.value?.title} - DACA輕食廚坊` },
+    {
+      property: "og:description",
+      content:
+        product.value?.content ||
+        "探索 DACA輕食廚坊的美味商品，享受精緻輕食與現泡茶飲。",
+    },
+    {
+      property: "og:image",
+      content: product.value?.photos[0],
+    },
+    { property: "og:type", content: "product" },
+    {
+      property: "og:url",
+      content: `https://dacafe.vercel.app/product/${route.params.id}`,
+    },
+  ],
+});
 </script>
 
 <style></style>

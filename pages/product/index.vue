@@ -142,6 +142,34 @@ const getProducts = async (category: string) => {
     loadingStore.loadingShow = false;
   } catch (error) {}
 };
+
+// 設定 Head
+useHead({
+  title: "商品列表 - DACA輕食廚坊",
+  meta: [
+    {
+      name: "description",
+      content:
+        "探索 DACA輕食廚坊的美味商品，包括輕食拼盤、手作美式漢堡、現泡茶飲等，讓您享受健康與美味。",
+    },
+    {
+      name: "keywords",
+      content: "輕食, 漢堡, 茶飲, 美食, DACA輕食廚坊, 早餐, 早午餐",
+    },
+    { name: "author", content: "DACA輕食廚坊" },
+    { property: "og:title", content: "商品列表 - DACA輕食廚坊" },
+    {
+      property: "og:description",
+      content: "發掘我們的輕食拼盤、美式漢堡與現泡茶飲，享受健康美味。",
+    },
+    // {
+    //   property: "og:image",
+    //   content: "https://yourwebsite.com/images/products-banner.jpg",
+    // },
+    { property: "og:type", content: "website" },
+    { property: "og:url", content: "https://dacafe.vercel.app/product" },
+  ],
+});
 </script>
 
 <style></style>

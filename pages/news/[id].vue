@@ -38,6 +38,40 @@ const { data } = await useAsyncData("news", () =>
 if (data.value) {
   news.value = data.value;
 }
+
+// 設定 Head
+useHead({
+  title: `${news.value?.title} - DACA輕食廚坊`,
+  meta: [
+    {
+      name: "description",
+      content:
+        news.value?.content ||
+        "探索 DACA輕食廚坊的美味商品，享受精緻輕食與現泡茶飲。",
+    },
+    {
+      name: "keywords",
+      content: `${news.value?.title}, 輕食, 美食, DACA輕食廚坊, 早午餐`,
+    },
+    { name: "author", content: "DACA輕食廚坊" },
+    { property: "og:title", content: `${news.value?.title} - DACA輕食廚坊` },
+    {
+      property: "og:description",
+      content:
+        news.value?.content ||
+        "探索 DACA輕食廚坊的美味商品，享受精緻輕食與現泡茶飲。",
+    },
+    {
+      property: "og:image",
+      content: news.value?.photos[0],
+    },
+    { property: "og:type", content: "news" },
+    {
+      property: "og:url",
+      content: `https://dacafe.vercel.app/news/${route.params.id}`,
+    },
+  ],
+});
 </script>
 
 <style></style>

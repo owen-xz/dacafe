@@ -266,6 +266,11 @@ const getTotalPrice = (order: Order) => {
 onMounted(() => {
   getOrders();
 });
+
+// 設定 Head
+useHead({
+  title: "會員專區 - DACA輕食廚坊",
+});
 </script>
 
 <style></style>

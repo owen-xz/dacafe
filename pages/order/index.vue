@@ -208,6 +208,11 @@ const setUserData = () => {
   orderData.value.phone = userStore.phone;
   orderData.value.email = userStore.email;
 };
+
+// 設定head
+useHead({
+  title: "建立訂單 - DACA輕食廚坊",
+});
 </script>
 
 <style>
