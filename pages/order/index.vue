@@ -217,10 +217,10 @@ onMounted(() => {
 
 <style>
 .orderDateInput {
-  border-color: black;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  border-radius: 0;
+  border-color: black !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  border-radius: 0 !important;
 }
 .orderDateInput:hover {
   border-color: black !important;

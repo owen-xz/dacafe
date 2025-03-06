@@ -136,13 +136,13 @@ onMounted(() => {
 
 <style>
 .reservationDateInput {
-  background-color: black;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  border: none;
-  color: white;
+  background-color: black !important;
+  padding-top: 16px !important;
+  padding-bottom: 16px !important;
+  border: none !important;
+  color: white !important;
 }
 .reservationDateInput::placeholder {
-  color: white;
+  color: white !important;
 }
 </style>
