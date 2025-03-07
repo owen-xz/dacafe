@@ -3,8 +3,6 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   runtimeConfig: {
-    // The private keys which are only available server-side
-    apiSecret: "123",
     // Keys within public are also exposed client-side
     public: {
       API_BASE_URL: "https://dacabe-owens-projects-3ea616dd.vercel.app/api",
@@ -47,10 +45,10 @@ export default defineNuxtConfig({
         },
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://dacafe.vercel.app/" }, // 請替換成你的網站 URL
-        // {
-        //   property: "og:image",
-        //   content: "https://yourwebsite.com/og-image.jpg",
-        // }, // 代表性圖片
+        {
+          property: "og:image",
+          content: "https://i.imgur.com/HZE78Q4.png",
+        }, // 代表性圖片
         // Twitter Meta Tags
         { name: "twitter:card", content: "summary_large_image" },
         {
@@ -61,10 +59,10 @@ export default defineNuxtConfig({
           name: "twitter:description",
           content: "健康美味的輕食與現泡茶飲，適合早午餐、好友聚會與包場活動。",
         },
-        // {
-        //   name: "twitter:image",
-        //   content: "https://yourwebsite.com/twitter-image.jpg",
-        // },
+        {
+          name: "twitter:image",
+          content: "https://i.imgur.com/HZE78Q4.png",
+        },
       ],
     },
   },

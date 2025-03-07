@@ -162,10 +162,10 @@ useHead({
       property: "og:description",
       content: "發掘我們的輕食拼盤、美式漢堡與現泡茶飲，享受健康美味。",
     },
-    // {
-    //   property: "og:image",
-    //   content: "https://yourwebsite.com/images/products-banner.jpg",
-    // },
+    {
+      property: "og:image",
+      content: "https://i.imgur.com/HZE78Q4.png",
+    },
     { property: "og:type", content: "website" },
     { property: "og:url", content: "https://dacafe.vercel.app/product" },
   ],
